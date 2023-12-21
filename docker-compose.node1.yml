@@ -1,0 +1,141 @@
+version: "3"
+services:
+  router_node_a1:
+    image: mysql/mysql-router
+    container_name: router_node_a1
+    hostname: router_node_a1
+    volumes:
+      - ./logs:/var/log
+    environment:
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    network_mode: "host"
+    depends_on:
+      - node_a1
+      - node_a2
+  node_a1:
+    image: mysql_innodb_cluster
+    container_name: node_a1
+    hostname: node_a1
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+    network_mode: "host"
+    volumes:
+      - ./conf/node_a1:/etc/mysql/conf.d
+      - ./data/node_a1:/var/lib/mysql
+      - ./logs:/var/log
+      - ./sql_backup:/sql_backup
+  node_a2:
+    image: mysql_innodb_cluster
+    container_name: node_a2
+    hostname: node_a2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+    network_mode: "host"
+    volumes:
+      - ./conf/node_a2:/etc/mysql/conf.d
+      - ./data/node_a2:/var/lib/mysql
+      - ./logs:/var/log
+  phpmyadmin_a1:
+    container_name: phpmyadmin_a1
+    hostname: phpmyadmin_a1
+    image: phpmyadmin/phpmyadmin
+    volumes:
+      - ./conf/phpmyadmin_a1/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+      - ./data/phpmyadmin_a1/:/srv/phpmyadmin/
+    network_mode: "host"
+    environment:
+      PMA_HOST: 127.0.0.1
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      UPLOAD_LIMIT: "100M"
+      APACHE_PORT: 31111
+    depends_on:
+      - node_a1
+  phpmyadmin_a2:
+    container_name: phpmyadmin_a2
+    hostname: phpmyadmin_a2
+    image: phpmyadmin/phpmyadmin
+    volumes:
+      - ./conf/phpmyadmin_a2/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+      - ./data/phpmyadmin_a2/:/srv/phpmyadmin/
+    network_mode: "host"
+    environment:
+      PMA_HOST: 127.0.0.1
+      PMA_PORT: 4306
+      PMA_USER: root
+      PMA_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      UPLOAD_LIMIT: "100M"
+      APACHE_PORT: 31112
+    depends_on:
+      - node_a2
+  phpmyadmin_router_a1_rw:
+    container_name: phpmyadmin_router_a1_rw
+    hostname: phpmyadmin_router_a1_rw
+    image: phpmyadmin/phpmyadmin
+    volumes:
+      - ./conf/phpmyadmin_router_a1_rw/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+      - ./data/phpmyadmin_router_a1_rw/:/srv/phpmyadmin/
+    network_mode: "host"
+    environment:
+      PMA_HOST: 127.0.0.1
+      PMA_PORT: 6446
+      PMA_USER: root
+      PMA_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      UPLOAD_LIMIT: "100M"
+      APACHE_PORT: 31121
+    depends_on:
+      - router_node_a1
+  phpmyadmin_router_a1_ro:
+    container_name: phpmyadmin_router_a1_ro
+    hostname: phpmyadmin_router_a1_ro
+    image: phpmyadmin/phpmyadmin
+    volumes:
+      - ./conf/phpmyadmin_router_a1_ro/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+      - ./data/phpmyadmin_router_a1_ro/:/srv/phpmyadmin/
+    network_mode: "host"
+    environment:
+      PMA_HOST: 127.0.0.1
+      PMA_PORT: 6447
+      PMA_USER: root
+      PMA_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      UPLOAD_LIMIT: "100M"
+      APACHE_PORT: 31122
+    depends_on:
+      - router_node_a1
+
+
+# networks:
+#   node1net:
+#     ipam:
+#       driver: default
+#       config:
+#         - subnet: 192.168.0.0/16
+#           ip_range: 192.168.154.0/24
+#           gateway: 192.168.154.1
+#           # aux_addresses:
+#           #   node_a1: 192.168.154.112
+#       options:
+#         com.docker.network.bridge.default_bridge: "true"
+#         com.docker.network.bridge.enable_icc: "true"
+#         com.docker.network.bridge.enable_ip_masquerade: "true"
+#         com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
+#         com.docker.network.bridge.name: "eth0"
+#         com.docker.network.driver.mtu: "1500"
