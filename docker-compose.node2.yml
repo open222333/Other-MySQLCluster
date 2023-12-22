@@ -27,18 +27,6 @@ services:
       - ./conf/node_b1:/etc/mysql/conf.d
       - ./data/node_b1:/var/lib/mysql
       - ./logs:/var/log
-  node_b2:
-    image: mysql_innodb_cluster
-    container_name: node_b2
-    hostname: node_b2
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_ROOT_HOST: "%"
-    network_mode: "host"
-    volumes:
-      - ./conf/node_b2:/etc/mysql/conf.d
-      - ./data/node_b2:/var/lib/mysql
-      - ./logs:/var/log
   phpmyadmin_b1:
     container_name: phpmyadmin_b1
     hostname: phpmyadmin-container
@@ -56,9 +44,21 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       UPLOAD_LIMIT: "100M"
-      APACHE_PORT: 31113
+      APACHE_PORT: 32111
     depends_on:
       - node_b1
+  node_b2:
+    image: mysql_innodb_cluster
+    container_name: node_b2
+    hostname: node_b2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+    network_mode: "host"
+    volumes:
+      - ./conf/node_b2:/etc/mysql/conf.d
+      - ./data/node_b2:/var/lib/mysql
+      - ./logs:/var/log
   phpmyadmin_b2:
     container_name: phpmyadmin_b2
     hostname: phpmyadmin-container
@@ -76,7 +76,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       UPLOAD_LIMIT: "100M"
-      APACHE_PORT: 31114
+      APACHE_PORT: 32112
     depends_on:
       - node_b2
   phpmyadmin_router_b1_rw:
@@ -96,7 +96,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       UPLOAD_LIMIT: "100M"
-      APACHE_PORT: 31121
+      APACHE_PORT: 32121
     depends_on:
       - router_node_b1
   phpmyadmin_router_b1_ro:
@@ -116,6 +116,6 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       UPLOAD_LIMIT: "100M"
-      APACHE_PORT: 31122
+      APACHE_PORT: 32122
     depends_on:
       - router_node_b1

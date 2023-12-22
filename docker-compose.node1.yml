@@ -28,18 +28,6 @@ services:
       - ./data/node_a1:/var/lib/mysql
       - ./logs:/var/log
       - ./sql_backup:/sql_backup
-  node_a2:
-    image: mysql_innodb_cluster
-    container_name: node_a2
-    hostname: node_a2
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_ROOT_HOST: "%"
-    network_mode: "host"
-    volumes:
-      - ./conf/node_a2:/etc/mysql/conf.d
-      - ./data/node_a2:/var/lib/mysql
-      - ./logs:/var/log
   phpmyadmin_a1:
     container_name: phpmyadmin_a1
     hostname: phpmyadmin_a1
@@ -60,6 +48,18 @@ services:
       APACHE_PORT: 31111
     depends_on:
       - node_a1
+  node_a2:
+    image: mysql_innodb_cluster
+    container_name: node_a2
+    hostname: node_a2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+    network_mode: "host"
+    volumes:
+      - ./conf/node_a2:/etc/mysql/conf.d
+      - ./data/node_a2:/var/lib/mysql
+      - ./logs:/var/log
   phpmyadmin_a2:
     container_name: phpmyadmin_a2
     hostname: phpmyadmin_a2

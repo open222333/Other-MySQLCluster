@@ -6,12 +6,12 @@
 ## 目錄
 
 - [Other-MySQLCluster](#other-mysqlcluster)
-	- [目錄](#目錄)
-	- [參考資料](#參考資料)
+  - [目錄](#目錄)
+  - [參考資料](#參考資料)
 - [結構圖](#結構圖)
 - [指令](#指令)
-	- [init.sql](#initsql)
-	- [mysql-cluster-shell](#mysql-cluster-shell)
+  - [init.sql](#initsql)
+  - [mysql-cluster-shell](#mysql-cluster-shell)
 
 ## 參考資料
 
@@ -20,11 +20,23 @@
 # 結構圖
 
 ```
-node_a1:11306 server-id=11
-node_a2:12306 server-id=12
-node_b1:21306 server-id=21
-node_b2:22306 server-id=22
-router_id=1
+port 以及 server-id
+
+router_node_a1: 3306
+node_a1: 11306, server-id=11
+phpmyadmin_a1: 31111
+node_a2: 12306, server-id=12
+phpmyadmin_a2: 31112
+phpmyadmin_router_a1_rw: 31121
+phpmyadmin_router_a1_ro: 31122
+
+router_node_b1: 3306
+node_b1: 21306, server-id=21
+phpmyadmin_b1: 32111
+node_b2: 22306, server-id=22
+phpmyadmin_b2: 32112
+phpmyadmin_router_a1_rw: 32121, pma_port: 6446
+phpmyadmin_router_a1_ro: 32122, pma_port: 6447
 ```
 
 # 指令
