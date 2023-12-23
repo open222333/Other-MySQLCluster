@@ -22,7 +22,7 @@
 ```
 port 以及 server-id
 
-router_node_a1: 3306, 6446, 6447
+router_node_a1: 3306, 6346, 6347
 node_a1: 1106, server-id=11
 phpmyadmin_a1: 21111
 node_a2: 1206, server-id=12
@@ -30,7 +30,7 @@ phpmyadmin_a2: 21112
 phpmyadmin_router_a1_rw: 31001
 phpmyadmin_router_a1_ro: 31002
 
-router_node_b1: 3306, 6446, 6447
+router_node_b1: 3306, 6346, 6347
 node_b1: 2106, server-id=21
 phpmyadmin_b1: 22111
 node_b2: 2206, server-id=22
