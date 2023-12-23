@@ -7,9 +7,9 @@ services:
     volumes:
       - ./conf/router_node_a1/mysqlrouter.conf:/etc/mysqlrouter/mysqlrouter.conf
       - ./logs:/var/log
-    ports:
-      - 6446:6446
-      - 6447:6447
+    # ports:
+    #   - 6446:6446
+    #   - 6447:6447
     environment:
       MYSQL_HOST: 127.0.0.1
       MYSQL_PORT: 3306
