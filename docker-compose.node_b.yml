@@ -5,9 +5,13 @@ services:
     container_name: router_node_b1
     hostname: router_node_b1
     volumes:
+      - ./conf/router_node_b1/mysqlrouter.conf:/etc/mysqlrouter/mysqlrouter.conf
       - ./logs:/var/log
+    ports:
+      - 6446:6446
+      - 6447:6447
     environment:
-      MYSQL_HOST: 192.168.154.112
+      MYSQL_HOST: 127.0.0.1
       MYSQL_PORT: 3306
       MYSQL_USER: root
       MYSQL_PASSWORD: root
@@ -37,14 +41,14 @@ services:
     network_mode: "host"
     environment:
       PMA_HOST: 127.0.0.1
-      PMA_PORT: 5306
+      PMA_PORT: 2106
       PMA_USER: root
       PMA_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       UPLOAD_LIMIT: "100M"
-      APACHE_PORT: 32111
+      APACHE_PORT: 22111
     depends_on:
       - node_b1
   node_b2:
@@ -69,14 +73,14 @@ services:
     network_mode: "host"
     environment:
       PMA_HOST: 127.0.0.1
-      PMA_PORT: 6306
+      PMA_PORT: 2206
       PMA_USER: root
       PMA_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       UPLOAD_LIMIT: "100M"
-      APACHE_PORT: 32112
+      APACHE_PORT: 22112
     depends_on:
       - node_b2
   phpmyadmin_router_b1_rw:
@@ -96,7 +100,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       UPLOAD_LIMIT: "100M"
-      APACHE_PORT: 32121
+      APACHE_PORT: 32001
     depends_on:
       - router_node_b1
   phpmyadmin_router_b1_ro:
@@ -116,6 +120,6 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       UPLOAD_LIMIT: "100M"
-      APACHE_PORT: 32122
+      APACHE_PORT: 32002
     depends_on:
       - router_node_b1

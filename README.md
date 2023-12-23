@@ -22,21 +22,21 @@
 ```
 port 以及 server-id
 
-router_node_a1: 3306
+router_node_a1: 3306, 6446, 6447
 node_a1: 1106, server-id=11
-phpmyadmin_a1: 31111
+phpmyadmin_a1: 21111
 node_a2: 1206, server-id=12
-phpmyadmin_a2: 31112
-phpmyadmin_router_a1_rw: 31121
-phpmyadmin_router_a1_ro: 31122
+phpmyadmin_a2: 21112
+phpmyadmin_router_a1_rw: 31001
+phpmyadmin_router_a1_ro: 31002
 
-router_node_b1: 3306
+router_node_b1: 3306, 6446, 6447
 node_b1: 2106, server-id=21
-phpmyadmin_b1: 32111
+phpmyadmin_b1: 22111
 node_b2: 2206, server-id=22
-phpmyadmin_b2: 32112
-phpmyadmin_router_a1_rw: 32121, pma_port: 6446
-phpmyadmin_router_a1_ro: 32122, pma_port: 6447
+phpmyadmin_b2: 22112
+phpmyadmin_router_a2_rw: 32001
+phpmyadmin_router_a2_ro: 32002
 ```
 
 # 指令
