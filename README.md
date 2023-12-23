@@ -6,12 +6,12 @@
 ## 目錄
 
 - [Other-MySQLCluster](#other-mysqlcluster)
-  - [目錄](#目錄)
-  - [參考資料](#參考資料)
+	- [目錄](#目錄)
+	- [參考資料](#參考資料)
 - [結構圖](#結構圖)
 - [指令](#指令)
-  - [init.sql](#initsql)
-  - [mysql-cluster-shell](#mysql-cluster-shell)
+	- [init.sql](#initsql)
+	- [mysql-cluster-shell](#mysql-cluster-shell)
 
 ## 參考資料
 
@@ -23,17 +23,17 @@
 port 以及 server-id
 
 router_node_a1: 3306
-node_a1: 11306, server-id=11
+node_a1: 1106, server-id=11
 phpmyadmin_a1: 31111
-node_a2: 12306, server-id=12
+node_a2: 1206, server-id=12
 phpmyadmin_a2: 31112
 phpmyadmin_router_a1_rw: 31121
 phpmyadmin_router_a1_ro: 31122
 
 router_node_b1: 3306
-node_b1: 21306, server-id=21
+node_b1: 2106, server-id=21
 phpmyadmin_b1: 32111
-node_b2: 22306, server-id=22
+node_b2: 2206, server-id=22
 phpmyadmin_b2: 32112
 phpmyadmin_router_a1_rw: 32121, pma_port: 6446
 phpmyadmin_router_a1_ro: 32122, pma_port: 6447
@@ -95,19 +95,19 @@ FLUSH PRIVILEGES;
 
 // 通過 shell 連接 mysql
 shell.connect('root@127.0.0.1:3306')
-shell.connect('root@192.168.154.112:3306')
-shell.connect('root@192.168.154.112:4306')
-shell.connect('root@192.168.158.173:5306')
-shell.connect('root@192.168.158.173:6306')
+shell.connect('root@192.168.154.112:1106')
+shell.connect('root@192.168.154.112:1206')
+shell.connect('root@192.168.158.173:2106')
+shell.connect('root@192.168.158.173:2206')
 
 // \sql
 // RESET MASTER;
 
 // 檢查實例配置，此處根據報錯修改配置文件，修改後需要重啟 MySQL(檢查正常會回傳 status:ok, 非必要)
-dba.checkInstanceConfiguration('root@192.168.154.112:3306')
-dba.checkInstanceConfiguration('root@192.168.154.112:4306')
-dba.checkInstanceConfiguration('root@192.168.158.173:5306')
-dba.checkInstanceConfiguration('root@192.168.158.173:6306')
+dba.checkInstanceConfiguration('root@192.168.154.112:1106')
+dba.checkInstanceConfiguration('root@192.168.154.112:1206')
+dba.checkInstanceConfiguration('root@192.168.158.173:2106')
+dba.checkInstanceConfiguration('root@192.168.158.173:2206')
 
 // \disconnect  //退出連接
 // 自動設置 Group Replication： 如果當前實例還沒有啟用 Group Replication，函數將自動執行必要的步驟來啟用 Group Replication。
@@ -130,14 +130,13 @@ dba.createCluster('avnight', {localAddress:'192.168.154.112:33061',ipAllowlist:'
 // 加入集群
 // 出現錯誤則 到錯誤的節點進入mysql 使用 reset master;
 var cluster = dba.getCluster('avnight')
-dba.getCluster('avnight').addInstance('root@192.168.154.112:3306')
-dba.getCluster('avnight').addInstance('root@192.168.154.112:4306')
-dba.getCluster('avnight').addInstance('root@192.168.158.173:5306')
-dba.getCluster('avnight').addInstance('root@192.168.158.173:6306')
-dba.getCluster('avnight').addInstance('root@192.168.158.173:7306')
+dba.getCluster('avnight').addInstance('root@192.168.154.112:1106')
+dba.getCluster('avnight').addInstance('root@192.168.154.112:1206')
+dba.getCluster('avnight').addInstance('root@192.168.158.173:2106')
+dba.getCluster('avnight').addInstance('root@192.168.158.173:2206')
 
 // 移除節點
-dba.getCluster('avnight').removeInstance('root@192.168.154.112:4306', {force:true})
+dba.getCluster('avnight').removeInstance('root@192.168.154.112:1206', {force:true})
 
 // 查看集群狀態
 dba.getCluster('avnight').status()
@@ -162,12 +161,12 @@ dba.rebootClusterFromCompleteOutage('avnight', {primary:'node_1:3306', force:tru
 // 重新掃描集群以查找新的和過時的組複製成員/實例，以及所使用的拓撲模式（即單主和多主）的更改。
 dba.getCluster('avnight').rescan()
 // 重新加入
-dba.getCluster('avnight').rejoinInstance('root@192.168.154.112:3306')
-dba.getCluster('avnight').rejoinInstance('root@192.168.154.112:4306')
+dba.getCluster('avnight').rejoinInstance('root@192.168.154.112:1106')
+dba.getCluster('avnight').rejoinInstance('root@192.168.154.112:1206')
 // 解散集群 (無法訪問集群成員)
 dba.getCluster('avnight').dissolve({force:true})
 
-dba.getCluster('avnight').setPrimaryInstance('root@192.168.154.112:3306')
+dba.getCluster('avnight').setPrimaryInstance('root@192.168.154.112:1106')
 
 // 檢視路由資訊：listRouters()
 dba.getCluster('avnight').listRouters()
