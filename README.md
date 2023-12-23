@@ -12,6 +12,7 @@
 - [指令](#指令)
 	- [init.sql](#initsql)
 	- [mysql-cluster-shell](#mysql-cluster-shell)
+- [mysql router](#mysql-router)
 
 ## 參考資料
 
@@ -89,6 +90,17 @@ FLUSH PRIVILEGES;
 ```
 
 ## mysql-cluster-shell
+
+```bash
+# 查看版本
+mysqlsh --version
+
+# 啟動 MySQL Shell，並連接到 MySQL 數據庫，執行各種管理和查詢任務
+mysqlsh -u username -h hostname -p
+
+# 重啟mgr集群
+mysqlsh --uri root@node_1:3306
+```
 
 ```JavaScript
 // https://dev.mysql.com/doc/dev/mysqlsh-api-javascript/8.0/group___admin_a_p_i.html
@@ -170,4 +182,15 @@ dba.getCluster('avnight').setPrimaryInstance('root@192.168.154.112:1106')
 
 // 檢視路由資訊：listRouters()
 dba.getCluster('avnight').listRouters()
+```
+
+# mysql router
+
+```bash
+# https://dev.mysql.com/doc/mysql-router/8.0/en/mysqlrouter.html#option_mysqlrouter_force-password-validation
+# 查看指令
+mysqlrouter --help
+
+# 啟動 MySQL Router
+mysqlrouter -c /path/to/router.conf
 ```
