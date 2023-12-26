@@ -6,12 +6,12 @@
 ## 目錄
 
 - [Other-MySQLCluster](#other-mysqlcluster)
-	- [目錄](#目錄)
-	- [參考資料](#參考資料)
+  - [目錄](#目錄)
+  - [參考資料](#參考資料)
 - [結構圖](#結構圖)
 - [指令](#指令)
-	- [init.sql](#initsql)
-	- [mysql-cluster-shell](#mysql-cluster-shell)
+  - [init.sql](#initsql)
+  - [mysql-cluster-shell](#mysql-cluster-shell)
 - [mysql router](#mysql-router)
 
 ## 參考資料
@@ -137,6 +137,7 @@ dba.configureLocalInstance()
 // 創建集群
 // host mode 必須讓 container 可以取得 host 機器的 public ip、private ip 網卡
 dba.createCluster('avnight')
+dba.createCluster('avnight', {ipAllowlist:'192.168.0.0/16,172.104.191.195,139.144.119.64'})
 dba.createCluster('avnight', {localAddress:'192.168.154.112:33061',ipAllowlist:'192.168.0.0/16,172.104.191.195,139.144.119.64'})
 
 // 加入集群
@@ -146,6 +147,10 @@ dba.getCluster('avnight').addInstance('root@192.168.154.112:1106')
 dba.getCluster('avnight').addInstance('root@192.168.154.112:1206')
 dba.getCluster('avnight').addInstance('root@192.168.158.173:2106')
 dba.getCluster('avnight').addInstance('root@192.168.158.173:2206')
+
+// ERROR: MySQL server at 'node_a2:1206' can't connect to 'node_a1:1106'. Verify configured report_host and that the address is valid at that host.
+// ERROR: RuntimeError: Server address configuration error
+// Cluster.addInstance: Server address configuration error (RuntimeError)
 
 // 移除節點
 dba.getCluster('avnight').removeInstance('root@192.168.154.112:1206', {force:true})
