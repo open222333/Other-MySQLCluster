@@ -137,6 +137,7 @@ dba.configureLocalInstance()
 // 創建集群
 // host mode 必須讓 container 可以取得 host 機器的 public ip、private ip 網卡
 dba.createCluster('avnight')
+// 需要用白名單選項 才能成功加入
 dba.createCluster('avnight', {ipAllowlist:'192.168.0.0/16,172.104.191.195,139.144.119.64'})
 dba.createCluster('avnight', {localAddress:'192.168.154.112:33061',ipAllowlist:'192.168.0.0/16,172.104.191.195,139.144.119.64'})
 
