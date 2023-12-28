@@ -4,12 +4,6 @@ services:
     image: mysql/mysql-router
     container_name: router_node_b1
     hostname: router_node_b1
-    volumes:
-      # - ./conf/router_node_b1/mysqlrouter.conf:/tmp/mysqlrouter/mysqlrouter.conf
-      - ./logs:/var/log
-    # ports:
-    #   - 6446:6446
-    #   - 6447:6447
     environment:
       MYSQL_HOST: 127.0.0.1
       MYSQL_PORT: 2106
