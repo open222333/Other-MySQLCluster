@@ -5,7 +5,7 @@ services:
     container_name: router_node_a1
     hostname: router_node_a1
     volumes:
-      - ./conf/router_node_a1/mysqlrouter.conf:/tmp/mysqlrouter/mysqlrouter.conf
+      # - ./conf/router_node_a1/mysqlrouter.conf:/tmp/mysqlrouter/mysqlrouter.conf
       - ./logs/router_node_a1:/tmp/mysqlrouter/log
     # ports:
     #   - 6446:6446
