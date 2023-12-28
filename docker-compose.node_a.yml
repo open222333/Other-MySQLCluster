@@ -12,7 +12,7 @@ services:
     #   - 6447:6447
     environment:
       MYSQL_HOST: 127.0.0.1
-      MYSQL_PORT: 3306
+      MYSQL_PORT: 1106
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     network_mode: "host"

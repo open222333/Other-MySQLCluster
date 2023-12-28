@@ -13,6 +13,9 @@
   - [init.sql](#initsql)
   - [mysql-cluster-shell](#mysql-cluster-shell)
 - [mysql router](#mysql-router)
+- [錯誤排除](#錯誤排除)
+  - [重啟後 使用 mysqlsh 創建 cluster 失敗](#重啟後-使用-mysqlsh-創建-cluster-失敗)
+  - [所有成員都重新啟動過](#所有成員都重新啟動過)
 
 ## 參考資料
 
@@ -174,7 +177,7 @@ dba.getCluster('avnight').options()
 // 重啟 Cluster
 // https://dev.mysql.com/doc/dev/mysqlsh-api-javascript/8.0/classmysqlsh_1_1dba_1_1_dba.html#ac68556e9a8e909423baa47dc3b42aadb
 dba.rebootClusterFromCompleteOutage()
-dba.rebootClusterFromCompleteOutage('avnight', {primary:'node_1:3306', force:true})
+dba.rebootClusterFromCompleteOutage('avnight', {primary:'root@192.168.154.112:1106', force:true})
 
 // 重新掃描集群以查找新的和過時的組複製成員/實例，以及所使用的拓撲模式（即單主和多主）的更改。
 dba.getCluster('avnight').rescan()
@@ -199,4 +202,64 @@ mysqlrouter --help
 
 # 啟動 MySQL Router
 mysqlrouter -c /path/to/router.conf
+```
+
+# 錯誤排除
+
+## 重啟後 使用 mysqlsh 創建 cluster 失敗
+
+```
+Dba.createCluster: dba.createCluster: Unable to create cluster. The instance '192.168.154.112:1106' has a populated Metadata schema and belongs to that Metadata. Use either dba.dropMetadataSchema() to drop the schema, or dba.rebootClusterFromCompleteOutage() to reboot the cluster from complete outage. (RuntimeError)
+```
+
+`刪除現有的 Metadata 模式`
+
+```sql
+dba.dropMetadataSchema();
+```
+
+`重新啟動集群`
+
+```sql
+dba.rebootClusterFromCompleteOutage();
+```
+
+## 所有成員都重新啟動過
+
+```
+MySQL 實例正在使用 Group Replication，但目前它還未指定主要成員（primary member）。
+
+在正常的 Group Replication 部署中，一個成員會被選為主要成員，其他成員將與之同步。
+group_replication_primary_member 變數是空的，這可能表示 Group Replication 尚未完全初始化或者存在一些配置問題。
+```
+
+`初始化 Group Replication步驟`
+
+`檢查 Group Replication 的狀態`
+
+```sql
+SHOW GLOBAL STATUS LIKE 'group_replication%';
+```
+
+`初始化 Group Replication`
+
+```sql
+SET GLOBAL group_replication_bootstrap_group = ON;
+SET GLOBAL group_replication_bootstrap_group = OFF;
+```
+
+`啟動 Group Replication`
+
+```sql
+START GROUP_REPLICATION;
+```
+
+`檢查其他 Group Replication 變數`
+
+```sql
+SHOW VARIABLES LIKE 'group_replication%';
+```
+
+```sql
+SHOW GLOBAL STATUS LIKE 'group_replication%';
 ```
